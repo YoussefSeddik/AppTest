@@ -1,6 +1,6 @@
 package com.seddik.youssef.graphqlapp.main
 
-import com.apollographql.apollo.api.Response
+
 
 object MainContract {
     interface Peresenter {

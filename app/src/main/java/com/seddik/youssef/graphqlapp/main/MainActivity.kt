@@ -7,6 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.seddik.youssef.graphqlapp.BasePresenter
 import com.seddik.youssef.graphqlapp.R
 import com.seddik.youssef.graphqlapp.UserLayoutViewModel_
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -21,7 +25,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         presenter.getAllPosts()
+
 
         send.setOnClickListener {
             title = title_et.text.toString()
