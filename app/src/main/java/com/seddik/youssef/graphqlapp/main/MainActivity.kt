@@ -4,30 +4,32 @@ import AllPostsQuery
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.seddik.youssef.graphqlapp.BasePresenter
 import com.seddik.youssef.graphqlapp.R
-import com.seddik.youssef.graphqlapp.UserLayoutViewModel_
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.core.KoinComponent
+import org.koin.core.context.startKoin
+import org.koin.core.inject
 
 
-class MainActivity : AppCompatActivity(), MainContract.View {
+class MainActivity : AppCompatActivity(), MainContract.View ,KoinComponent{
     private lateinit var title: String
     private lateinit var desc: String
 
-    val presenter = MainActivityPresenter()
+    var presenter by inject()0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        startKoin {
 
+        }
+        presenter.attachView(this,lifecycle)
+
+        /////////////////////////////////////////////
         presenter.getAllPosts()
-
+        /////////////////////////////////////////////
 
         send.setOnClickListener {
             title = title_et.text.toString()
@@ -42,26 +44,33 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     override fun onResume() {
         super.onResume()
         if (!presenter.isViewAttached()) {
-            presenter.attachView(this)
+            presenter.attachView(this,lifecycle)
         }
     }
 
-    fun setUpRecyclerView(allPosts: List<AllPostsQuery.AllPost>) {
-        recyclerView.buildModelsWith {
-            allPosts.forEachIndexed { index, post ->
-                UserLayoutViewModel_()
-                    .id(index)
-                    .title(post.title())
-                    .desc(post.description())
-                    .addTo(it)
-            }
+    override fun onPause() {
+        super.onPause()
+        if (presenter.isViewAttached()) {
+            presenter.disAttachViewe(this,lifecycle)
         }
     }
+
+//    private fun setUpRecyclerView(allPosts: List<AllPostsQuery.AllPost>) {
+//        recyclerView.buildModelsWith {
+//            allPosts.forEachIndexed { index, post ->
+//                UserLayoutViewModel_()
+//                    .id(index)
+//                    .title(post.title())
+//                    .desc(post.description())
+//                    .addTo(it)
+//            }
+//        }
+//    }
 
     override fun display(posts: List<AllPostsQuery.AllPost>?) {
         if (posts != null) {
             runOnUiThread {
-                setUpRecyclerView(posts)
+                //                setUpRecyclerView(posts)
             }
         }
     }

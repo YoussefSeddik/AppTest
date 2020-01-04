@@ -43,13 +43,14 @@ class MainActivityPresenter : BasePresenter<MainContract.View>(), MainContract.P
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
-                    onNext = {view?.display(it.data()?.allPosts())},
-                    onError = {Log.e("faild","get posts faild")}
+                    onNext = { view?.display(it.data()?.allPosts()) },
+                    onError = { Log.e("faild", "get posts faild") }
                 )
 
         )
 
     }
+
 
 //        MyApolloClient.getApolloClient().query(
 //            AllPostsQuery.builder().build()

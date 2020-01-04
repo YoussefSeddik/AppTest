@@ -1,5 +1,8 @@
 package com.seddik.youssef.graphqlapp
 
-interface MvpPresenter<View> {
-    fun attachView(view: View)
+import androidx.lifecycle.Lifecycle
+
+interface MvpPresenter<V> {
+    fun attachView(view: V?, lifecycle: Lifecycle)
+    fun disAttachViewe(view: V?, lifecycle: Lifecycle)
 }
